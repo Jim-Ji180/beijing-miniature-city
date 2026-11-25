@@ -1,0 +1,1 @@
+Vehicle GLB bases from [Shuriken Studio](https://shuriken.studio/models), included in this application under the [Free Model License](https://shuriken.studio/legal/models), version 2026-11-12. The scene adapts their materials, markings and lighting. These files are part of the application.

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>北京微缩地图</title>
+  <link rel="stylesheet" href="./weather-controls.css?v=41">
+  <link rel="help" href="./credits.html" title="模型来源与署名">
+</head>
+<body>
+<div class="wallpaper" aria-hidden="true"></div>
+<main class="weather-page">
+  <header class="page-header glass-surface"><span class="page-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 8 9-5 9 5-9 5-9-5Zm0 4 9 5 9-5M3 16l9 5 9-5"/></svg></span><h1>北京微缩地图</h1></header>
+  <div class="dashboard" id="weather-panel">
+    <section class="scene-frame glass-surface" aria-label="北京三维互动地图">
+      <div id="stage"></div>
+<div id="tools" class="glass-surface" role="toolbar" aria-label="场景操作"><button class="icon" id="add" type="button" aria-label="放飞鸽群" title="放飞鸽群"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button><button id="build-office" type="button" disabled title="重播全城施工动画">建楼演示</button><button class="icon" id="pause" aria-label="暂停动画" title="暂停动画"><svg viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></svg></button><button id="center-view" type="button" title="回到正面视角">视角回正</button><button class="icon" id="reset" aria-label="重置场景" title="重置场景"><svg viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button></div>
+
+      <div id="status" role="status"></div>
+      <div id="error">此浏览器暂时无法显示三维场景，请使用支持 WebGL 的浏览器。</div>
+    </section>
+    <aside class="weather-column" aria-label="天气设置">
+      <section id="weather-card" class="control-card glass-surface" aria-labelledby="weather-heading">
+<h2 id="weather-heading"><span class="card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18h12a3.5 3.5 0 0 0 .2-7A5.7 5.7 0 0 0 7 10.5 3.8 3.8 0 1 0 6 18Z"/></svg></span>天空</h2>
+<div class="range-row">
+  <div class="value-row"><label for="cloud-amount"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18h12a3.5 3.5 0 0 0 .2-7A5.7 5.7 0 0 0 7 10.5 3.8 3.8 0 1 0 6 18Z"/></svg>云量</label><output id="cloud-value" for="cloud-amount" aria-live="off">32%</output></div>
+  <input type="range" id="cloud-amount" min="0" max="100" value="32" aria-valuetext="32%" style="--range-value:32%">
+</div>
+<div class="range-row">
+  <div class="value-row"><label for="cloud-thickness"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18h12a3.5 3.5 0 0 0 .2-7A5.7 5.7 0 0 0 7 10.5 3.8 3.8 0 1 0 6 18Z"/></svg>云厚</label><output id="thickness-value" for="cloud-thickness" aria-live="off">50%</output></div>
+  <input type="range" id="cloud-thickness" min="0" max="100" value="50" aria-valuetext="50%" style="--range-value:50%">
+</div>
+<div class="range-row">
+  <div class="value-row"><label for="wind-amount"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8h12a3 3 0 1 0-3-3M2 12h17a2.5 2.5 0 1 1-2.5 2.5M4 16h8a3 3 0 1 1-3 3"/></svg>风力</label><output id="wind-value" for="wind-amount" aria-live="off">50%</output></div>
+  <input type="range" id="wind-amount" min="0" max="100" value="50" aria-valuetext="50%" style="--range-value:50%">
+</div>
+<label class="switch-row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18v-2a9 9 0 0 1 18 0v2M6 18v-2a6 6 0 0 1 12 0v2m-9 0v-2a3 3 0 0 1 6 0v2"/></svg><span>彩虹</span><input id="weather-rainbow" type="checkbox" role="switch"></label>
+</section>
+      <section id="precip-card" class="control-card glass-surface" aria-labelledby="precip-heading">
+<h2 id="precip-heading"><span class="card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14h12a3.2 3.2 0 0 0 0-6.4h-.7a5.5 5.5 0 0 0-10.5 1A2.8 2.8 0 1 0 6 14Zm2 3-1 3m6-3-1 3m6-3-1 3"/></svg></span>降水</h2>
+<div class="range-row"><div class="value-row"><label for="rain-amount">雨量</label><output id="rain-value" for="rain-amount">0%</output></div><input type="range" id="rain-amount" min="0" max="100" value="0" aria-valuetext="0%" style="--range-value:0%"></div>
+<label class="switch-row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M3.34 7l17.32 10M3.34 17 20.66 7M9 4l3 3 3-3M9 20l3-3 3 3M4 10l4-.8-.8-4m12.8 8.8-4 .8.8 4M4 14l4 .8-.8 4m12.8-8.8-4-.8.8-4"/></svg><span>下雪</span><input id="weather-snow" type="checkbox" role="switch"></label>
+<label class="switch-row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 2-8 12h6l-1 8 9-12h-6l1-8Z"/></svg><span>雷电</span><input id="weather-lightning" type="checkbox" role="switch"></label>
+</section>
+    </aside>
+    <div class="city-settings">
+      <section id="traffic-card" class="control-card glass-surface" aria-labelledby="traffic-heading">
+<h2 id="traffic-heading"><span class="card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 16v3m14-3v3M3 13l2-2 2-5h10l2 5 2 2v3H3Zm2-2h14m-13 3h2m8 0h2"/></svg></span>交通</h2>
+<label class="switch-row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 16v3m14-3v3M3 13l2-2 2-5h10l2 5 2 2v3H3Zm2-2h14m-13 3h2m8 0h2"/></svg><span>车辆</span><input id="traffic-cars" type="checkbox" role="switch" checked></label>
+<label class="switch-row"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="3"/><circle cx="12" cy="7" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="17" r="1"/></svg><span>红绿灯</span><input id="traffic-signals" type="checkbox" role="switch" checked></label>
+<label class="switch-row"><span>分辨率</span><select id="render-quality" style="margin-left:auto;font:inherit"><option value="high">高清</option><option value="medium">均衡</option><option value="low">省电</option></select></label>
+</section>
+      <section id="light-card" class="control-card glass-surface" aria-labelledby="light-heading">
+<h2 id="light-heading"><span class="card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.4A8.5 8.5 0 0 1 8.6 4 8.5 8.5 0 1 0 20 15.4Z"/><path d="M16 3v4m-2-2h4"/></svg></span>昼夜</h2>
+<fieldset class="segmented" aria-label="时间"><div class="segments"><label><input id="day-mode" name="daylight" type="radio" value="day" checked><span>白天</span></label><label><input id="night-mode" name="daylight" type="radio" value="night"><span>夜晚</span></label></div></fieldset>
+<div class="solar-time">
+  <input type="range" id="solar-time" min="300" max="1380" step="5" value="930"
+    aria-label="太阳时间" aria-valuetext="15:30 午后">
+  <div class="solar-readout" aria-hidden="true"><output for="solar-time">15:30</output><span>午后</span></div>
+  <div class="solar-arc-hit" aria-hidden="true">
+    <div class="solar-arc-plot">
+      <div class="solar-arc-track"></div><span class="solar-arc-thumb"></span>
+    </div>
+  </div>
+  <div class="solar-arc-labels" aria-hidden="true"><span>朝霞</span><span>中午</span><span>晚霞</span><span>夜晚</span></div>
+</div>
+<label class="switch-row"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.4 1.4m11.2 11.2L19 19m0-14-1.4 1.4M6.4 17.6 5 19"/></svg><span>太阳</span><input id="weather-sun" type="checkbox" role="switch" checked></label>
+</section>
+    </div>
+  </div>
+</main>
+<nav class="control-dock glass-surface" aria-label="场景设置">
+<button data-panel="weather-card" aria-controls="weather-card" aria-expanded="false">天空</button>
+<button data-panel="precip-card" aria-controls="precip-card" aria-expanded="false">降水</button>
+<button data-panel="traffic-card" aria-controls="traffic-card" aria-expanded="false">交通</button>
+<button data-panel="light-card" aria-controls="light-card" aria-expanded="false">昼夜</button>
+</nav>
+<script type="module" src="./panel-navigation.js?v=329"></script>
+
+<script type="module" src="./scene.js?v=331"></script>
+
+</body>
+</html>
